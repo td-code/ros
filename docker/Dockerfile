@@ -50,6 +50,20 @@ RUN if [ "$TARGETPLATFORM" = "linux/amd64" ]; then \
     ros-${ROS_DISTRO}-ros-ign; \
     fi
 
+# Turtlebot (not useful without Gazebo)
+RUN if [ "$TARGETPLATFORM" = "linux/amd64" ]; then \
+    apt-get update -q && export DEBIAN_FRONTEND=noninteractive \
+    && apt-get install -y --no-install-recommends \
+    ros-${ROS_DISTRO}-cartographer \
+    ros-${ROS_DISTRO}-cartographer-ros \
+    ros-${ROS_DISTRO}-navigation2 \
+    ros-${ROS_DISTRO}-nav2-bringup \
+    ros-${ROS_DISTRO}-turtlebot3 \
+    ros-${ROS_DISTRO}-turtlebot3-fake-node \
+    ros-${ROS_DISTRO}-turtlebot3-gazebo \
+    && rm -rf /var/lib/apt/lists/*; \
+    fi
+
 RUN apt-get update -q && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install --no-install-recommends libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev libfreetype6-dev libportmidi-dev libjpeg-dev \
     && apt-get -y install --no-install-recommends python3-networkx python3-matplotlib python3-numpy python3-pygame python3-opencv python3-distro python3-shapely \
