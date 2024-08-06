@@ -1,4 +1,4 @@
-ARG VARIANT=jammy
+ARG VARIANT=focal
 FROM mcr.microsoft.com/vscode/devcontainers/base:${VARIANT}
 
 RUN apt-get update -q && \
@@ -17,7 +17,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     zsh \
     && rm -rf /var/lib/apt/lists/*
 
-ARG ROS_DISTRO=humble
+ARG ROS_DISTRO=foxy
 ARG INSTALL_PACKAGE=desktop
 ARG TARGETPLATFORM=linux/amd64
 
@@ -64,10 +64,11 @@ RUN if [ "$TARGETPLATFORM" = "linux/amd64" ]; then \
     && rm -rf /var/lib/apt/lists/*; \
     fi
 
+# Prepare Carla PythonAPI (install later with specific version)
 RUN apt-get update -q && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install --no-install-recommends libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev libfreetype6-dev libportmidi-dev libjpeg-dev \
     && apt-get -y install --no-install-recommends python3-networkx python3-matplotlib python3-numpy python3-pygame python3-opencv python3-distro python3-shapely \
-    && pip3 install carla \
+    && apt-get -y install --no-install-recommends ros-${ROS_DISTRO}-derived-object-msgs \
     && apt-get autoclean \
     && apt-get autoremove \
     && rm -rf /var/lib/apt/lists/*
