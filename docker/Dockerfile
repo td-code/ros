@@ -64,11 +64,13 @@ RUN if [ "$TARGETPLATFORM" = "linux/amd64" ]; then \
     && rm -rf /var/lib/apt/lists/*; \
     fi
 
-# Prepare Carla PythonAPI (install later with specific version)
+# Prepare Carla PythonAPI (currently, version 0.9.13)
 RUN apt-get update -q && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install --no-install-recommends libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev libfreetype6-dev libportmidi-dev libjpeg-dev \
     && apt-get -y install --no-install-recommends python3-networkx python3-matplotlib python3-numpy python3-pygame python3-opencv python3-distro python3-shapely \
-    && apt-get -y install --no-install-recommends ros-${ROS_DISTRO}-derived-object-msgs \
+    && apt-get -y install ros-${ROS_DISTRO}-tf-transformations ros-${ROS_DISTRO}-ackermann-msgs ros-${ROS_DISTRO}-derived-object-msgs \
+    && python3 -m pip --disable-pip-version-check --no-cache-dir install --upgrade pip \
+    && python3 -m pip --disable-pip-version-check --no-cache-dir install carla==0.9.13 \  
     && apt-get autoclean \
     && apt-get autoremove \
     && rm -rf /var/lib/apt/lists/*
